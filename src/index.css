@@ -1,0 +1,105 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.square {
+  border: 3px solid wheat;
+  font-weight: bold;
+  border-bottom-color: #000000;
+  border-right-color: #000000;
+  border-radius: 0;
+  padding: 0px, 0px;
+  margin: 0px;
+}
+
+.square-big {
+  width: 72px !important;
+  height: 72px !important;
+}
+.square-small {
+  width: 48px !important;
+  height: 48px !important;
+  font-size: 18pt;
+  padding: 0pt;
+}
+
+.board {
+  border: 1px solid black;
+  max-width: 360px;
+}
+
+.flagCounter {
+  float: left;
+}
+.timer {
+  float: right;
+}
+
+.SevenSeg {
+  background-color: rgba(0, 0, 0, 1);
+  height: 70px !important;
+  width: 39px;
+  border: 1px solid red;
+  float: left;
+  /*//display: "inline"
+    //verticalAlign: "middle"*/
+}
+
+.topBox {
+  margin-top: 12px;
+}
+
+.hexagon {
+  position: relative;
+  left: 4px;
+  top: -100px;
+  width: 9px;
+  height: 15px;
+  background-color: #4a0002;
+  margin: 100px 10px;
+  transform: rotate(90deg);
+}
+
+.hexagon:before,
+.hexagon:after {
+  content: "";
+  position: relative;
+  width: 0;
+  border-left: 4.5px solid transparent;
+  border-right: 4.5px solid transparent;
+}
+
+.hexagon:before {
+  bottom: 100%;
+  border-bottom: 3px solid #4a0002;
+  left: -0px;
+  top: -25.4px;
+}
+
+.hexagon:after {
+  top: 100%;
+  width: 0;
+  border-top: 3px solid #4a0002;
+  left: -9px;
+  top: 16.6px;
+}
+
+#trapezoid {
+  margin-top: 100px;
+  height: 0;
+  width: 12px;
+  border-bottom: 120px solid red;
+  border-left: 45px solid transparent;
+  border-right: 45px solid transparent;
+  padding: 0 8px 0 0;
+}
