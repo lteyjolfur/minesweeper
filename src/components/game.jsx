@@ -9,7 +9,9 @@ class Game extends Component {
     smiley: {
       display: { smiley: "🙂", worried: "😯", win: "😎", lose: "💀" },
       displayIndex: "smiley"
-    }
+    },
+    flags: 0,
+    mines: 10
   };
 
   HandleMouseDown = () => {
@@ -43,10 +45,9 @@ class Game extends Component {
             borderLeftColor: "rgba(20,20,20,1)"
           }}
         >
-          <Counter float="left" />
-
+          <Counter float="left" number={this.state.mines - this.state.flags} />
           <Smiley smiley={this.state.smiley} />
-          <Counter float="right" />
+          <Counter float="right" number={0} />
         </div>
         <div
           style={{
@@ -57,7 +58,6 @@ class Game extends Component {
         >
           <Board />
         </div>
-        <div id="trapezoid"></div>
       </div>
     );
   }

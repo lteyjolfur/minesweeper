@@ -92,7 +92,6 @@ class Board extends Component {
         squares[i][j].Ranges = { iRange: iRange, jRange: jRange };
       }
     }
-    console.log(squares);
     this.state = { squares: squares, win: false, lose: false, numFlags: 0 };
   }
 

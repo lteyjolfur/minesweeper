@@ -1,30 +1,99 @@
 import React, { Component } from "react";
 
 class SevenSeg extends Component {
-  state = { number: 1 };
-
   decode = number => {
     const decTo7 = [
-      [0, 1, 2, 3, 4, 5],
-      [1, 2],
-      [0, 1, 3, 4, 6],
-      [0, 1, 2, 3, 6],
-      [1, 2, 5, 6],
-      [0, 2, 3, 5, 6],
-      [0, 2, 3, 4, 5, 6],
-      [0, 1, 2],
-      [0, 1, 2, 3, 4, 5, 6],
-      [0, 1, 2, 3, 5, 6]
+      [true, true, true, true, true, true, false],
+      [false, true, true, false, false, false, false],
+      [true, true, false, true, true, false, true],
+      [true, true, true, true, false, false, true],
+      [false, true, true, false, false, true, true],
+      [true, false, true, true, false, true, true],
+      [true, false, true, true, true, true, true],
+      [true, true, true, false, false, false, false],
+      [true, true, true, true, true, true, true],
+      [true, true, true, true, false, true, true]
     ];
     return decTo7[number];
   };
 
+  pickColor = number => {
+    if (this.decode(this.props.number)[number]) {
+      return "red";
+    } else {
+      return "#4a0002";
+    }
+  };
+
   render() {
+    let iterator = 0;
     return (
       <div className="SevenSeg">
         {" "}
-        {this.state.number}
-        <div className="hexagon"></div>
+        <div
+          className="trapezoid"
+          style={{
+            transform: "rotate(180deg)",
+            left: "5px",
+            top: "2px",
+            borderBottomColor: this.pickColor(0)
+          }}
+        ></div>
+        <div
+          className="trapezoid"
+          style={{
+            transform: "rotate(90deg)",
+            left: "-7px",
+            top: "6px",
+            borderBottomColor: this.pickColor(5)
+          }}
+        ></div>
+        <div
+          className="trapezoid"
+          style={{
+            transform: "rotate(270deg)",
+            left: "17px",
+            top: "-3px",
+            borderBottomColor: this.pickColor(1)
+          }}
+        ></div>
+        <div>
+          <div
+            className={
+              this.decode(this.props.number)[6] ? " hexagon-on" : "hexagon"
+            }
+            style={{
+              top: "-100px",
+              left: "4px"
+            }}
+          ></div>
+        </div>
+        <div
+          className="trapezoid"
+          style={{
+            transform: "rotate(90deg)",
+            top: "-197px",
+            left: "-7px",
+            borderBottomColor: this.pickColor(4)
+          }}
+        ></div>
+        <div
+          className="trapezoid"
+          style={{
+            transform: "rotate(270deg)",
+            top: "-206px",
+            left: "17px",
+            borderBottomColor: this.pickColor(2)
+          }}
+        ></div>
+        <div
+          className="trapezoid"
+          style={{
+            top: "-203px",
+            left: "5px",
+            borderBottomColor: this.pickColor(3)
+          }}
+        ></div>
       </div>
     );
   }

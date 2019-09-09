@@ -49,7 +49,7 @@ code {
   background-color: rgba(0, 0, 0, 1);
   height: 70px !important;
   width: 39px;
-  border: 1px solid red;
+  border: 1px solid black;
   float: left;
   /*//display: "inline"
     //verticalAlign: "middle"*/
@@ -59,10 +59,10 @@ code {
   margin-top: 12px;
 }
 
-.hexagon {
+.hexagon,
+.hexagon-on {
   position: relative;
   left: 4px;
-  top: -100px;
   width: 9px;
   height: 15px;
   background-color: #4a0002;
@@ -70,8 +70,14 @@ code {
   transform: rotate(90deg);
 }
 
+.hexagon-on {
+  background-color: red;
+}
+
 .hexagon:before,
-.hexagon:after {
+.hexagon:after,
+.hexagon-on:before,
+.hexagon-on:after {
   content: "";
   position: relative;
   width: 0;
@@ -79,27 +85,44 @@ code {
   border-right: 4.5px solid transparent;
 }
 
-.hexagon:before {
+.hexagon:before,
+.hexagon-on:before {
   bottom: 100%;
-  border-bottom: 3px solid #4a0002;
+  width: 0;
   left: -0px;
-  top: -25.4px;
+  top: -27.4px;
+}
+
+.hexagon:after,
+.hexagon-on:after {
+  top: 100%;
+  width: 0;
+  left: -9px;
+  top: 18.6px;
+}
+
+.hexagon:before {
+  border-bottom: 5px solid #4a0002;
+}
+.hexagon-on:before {
+  border-bottom: 5px solid red;
+}
+
+.hexagon-on:after {
+  border-top: 5px solid red;
 }
 
 .hexagon:after {
-  top: 100%;
-  width: 0;
-  border-top: 3px solid #4a0002;
-  left: -9px;
-  top: 16.6px;
+  border-top: 5px solid #4a0002;
 }
 
-#trapezoid {
-  margin-top: 100px;
+.trapezoid {
+  position: relative;
+  margin-top: 0px;
   height: 0;
-  width: 12px;
-  border-bottom: 120px solid red;
-  border-left: 45px solid transparent;
-  border-right: 45px solid transparent;
+  width: 27px;
+  border-bottom: 9px solid #4a0002;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
   padding: 0 8px 0 0;
 }
