@@ -126,3 +126,42 @@ code {
   border-right: 9px solid transparent;
   padding: 0 8px 0 0;
 }
+
+.outerBox {
+  border: 3px solid wheat;
+  border-top-color: rgba(20, 20, 20, 1);
+  border-left-color: rgba(20, 20, 20, 1);
+}
+.segment0 {
+  transform: rotate(180deg);
+  left: 5px;
+  top: 2px;
+}
+.segment1 {
+  transform: rotate(90deg);
+  left: -7px;
+  top: 6px;
+}
+.segment2 {
+  transform: rotate(270deg);
+  left: 17px;
+  top: -3px;
+}
+.segment3 {
+  top: -100px;
+  left: 4px;
+}
+.segment4 {
+  transform: rotate(90deg);
+  top: -197px;
+  left: -7px;
+}
+.segment5 {
+  transform: rotate(270deg);
+  top: -206px;
+  left: 17px;
+}
+.segment6 {
+  top: -203px;
+  left: 5px;
+}

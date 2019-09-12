@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { directive } from "@babel/types";
+//import { directive } from "@babel/types";
 
 class Smiley extends Component {
-  state = {};
   render() {
     return (
       <div
@@ -18,6 +17,7 @@ class Smiley extends Component {
       >
         <button
           className="btn btn-secondary square square-big "
+          onClick={this.props.onClick}
           style={{
             height: "72px !important",
             fontSize: 40,

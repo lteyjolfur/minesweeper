@@ -3,17 +3,24 @@ import SevenSeg from "./sevenSeg";
 
 class Counter extends Component {
   getFirstDec() {
-    return Math.floor(this.props.number / 100);
+    const number = this.props.number;
+    if (number >= 0) {
+      return Math.floor(number / 100);
+    } else {
+      return 10; // 10 makes a minus
+    }
   }
   getSecondDec() {
-    return Math.floor((this.props.number % 100) / 10);
+    const number = Math.abs(this.props.number);
+    return Math.floor((Math.abs(number) % 100) / 10);
   }
   getThirdDec() {
-    return Math.floor(this.props.number % 10);
+    const number = Math.abs(this.props.number);
+    return Math.floor(number % 10);
   }
 
   render() {
-    console.log(this.props.number);
+    //console.log(this.props.number);
     return (
       <div
         style={{
