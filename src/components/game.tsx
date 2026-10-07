@@ -172,21 +172,6 @@ class Game extends Component<GameProps, GameState> {
     this.setState({ hover: !this.state.hover });
   };
 
-  checkWin = () => {
-    let clicked = 0;
-    this.state.squares.map(row =>
-      row.map(square => {
-        if (square.clicked) {
-          clicked++;
-        }
-      })
-    );
-    if (clicked === this.state.gameSize - this.state.mines) {
-      this.handleWin();
-      this.setState({ win: true });
-    }
-  };
-
   handleLose = () => {
     this.stopTimer();
     const squares = this.state.squares.map(row =>
@@ -203,7 +188,7 @@ class Game extends Component<GameProps, GameState> {
     const smiley = this.state.smiley;
     smiley.displayIndex = "lose";
     smiley.display["smiley"] = "💀";
-    this.setState({ squares: squares, smiley: smiley });
+    this.setState({ squares: squares, smiley: smiley, lose: true });
   };
 
   handleWin = () => {
@@ -251,37 +236,52 @@ class Game extends Component<GameProps, GameState> {
     }
     this.makeSmile();
     const squares = this.state.squares.slice();
-    let lose = this.state.lose;
     const [row, column] = this.getRowColumn(id);
     const square = squares[row][column];
-    if (square.clicked || square.flag === 1 || lose) {
+    if (square.clicked || square.flag === 1 || this.state.lose) {
       return;
     }
-    squares[row][column].clicked = true;
     if (square.bomb) {
-      lose = true;
-      squares[row][column].displayIndex = "explosion";
+      square.clicked = true;
+      square.displayIndex = "explosion";
       this.handleLose();
-    } else {
-      squares[row][column].displayIndex = "value";
+      return;
     }
+    this.afterReveal(squares, this.reveal(squares, row, column));
+  };
 
-    const squaresClicked = this.state.squaresClicked + 1;
-    if (!lose) {
-      this.checkWin();
-      if (this.state.gameSize - squaresClicked === this.state.mines) {
-        console.log("win");
-        this.handleWin();
-        return;
+  // Reveals a square and, if it has no adjacent mines, everything that opens up
+  // around it (breadth-first, so no recursion and no setState per square).
+  // Mutates `squares` and returns how many squares were revealed.
+  reveal = (squares: SquareData[][], row: number, column: number) => {
+    let revealed = 0;
+    const queue: [number, number][] = [[row, column]];
+    while (queue.length > 0) {
+      const [r, c] = queue.shift()!;
+      const square = squares[r][c];
+      if (square.clicked || square.flag === 1) {
+        continue;
+      }
+      square.clicked = true;
+      square.displayIndex = "value";
+      revealed++;
+      if (square.display.value.text === "") {
+        const { iRange, jRange } = square.Ranges!;
+        for (const i of iRange) {
+          for (const j of jRange) {
+            queue.push([i, j]);
+          }
+        }
       }
     }
-    this.setState({
-      squares: squares,
-      lose: lose,
-      squaresClicked: squaresClicked
-    });
-    if (squares[row][column].display.value.text === "") {
-      this.clickAll(row, column);
+    return revealed;
+  };
+
+  afterReveal = (squares: SquareData[][], revealed: number) => {
+    const squaresClicked = this.state.squaresClicked + revealed;
+    this.setState({ squares: squares, squaresClicked: squaresClicked });
+    if (this.state.gameSize - squaresClicked === this.state.mines) {
+      this.handleWin();
     }
   };
 
@@ -302,15 +302,6 @@ class Game extends Component<GameProps, GameState> {
     if (++time < 1000) {
       this.setState({ time: time });
     }
-  };
-
-  callHandleClick = (row: number, column: number) => {
-    this.handleClick(row * BOARD_SIZE + column);
-    return 0;
-  };
-
-  clickAll = (row: number, column: number) => {
-    this.checkAllAdjacent(row, column, this.callHandleClick);
   };
 
   checkAllAdjacent = (
@@ -358,8 +349,35 @@ class Game extends Component<GameProps, GameState> {
       //console.log("flags is:" + flags);
       //console.log("value is:" + squares[row][column].display.value);
       if (flags === squares[row][column].display.value.text) {
-        this.clickAll(row, column);
+        this.chord(squares, row, column);
       }
+    }
+  };
+
+  // Reveals every unflagged square around a number whose flags add up to it.
+  chord = (squares: SquareData[][], row: number, column: number) => {
+    const { iRange, jRange } = squares[row][column].Ranges!;
+    let revealed = 0;
+    let hitMine = false;
+    for (const i of iRange) {
+      for (const j of jRange) {
+        const square = squares[i][j];
+        if (square.clicked || square.flag === 1) {
+          continue;
+        }
+        if (square.bomb) {
+          square.clicked = true;
+          square.displayIndex = "explosion";
+          hitMine = true;
+        } else {
+          revealed += this.reveal(squares, i, j);
+        }
+      }
+    }
+    if (hitMine) {
+      this.handleLose();
+    } else {
+      this.afterReveal(squares, revealed);
     }
   };
 
