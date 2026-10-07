@@ -1,7 +1,15 @@
-import React, { Component } from "react";
+import { Component } from "react";
 //import { directive } from "@babel/types";
 
-class Smiley extends Component {
+interface SmileyProps {
+  smiley: {
+    display: Record<string, string>;
+    displayIndex: string;
+  };
+  onClick: () => void;
+}
+
+class Smiley extends Component<SmileyProps> {
   render() {
     return (
       <div

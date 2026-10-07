@@ -1,10 +1,13 @@
 import React from "react";
 import "./App.css";
-import "./components/square";
 import Game from "./components/game";
 
-class App extends React.Component {
-  constructor(props) {
+interface AppState {
+  game: () => React.JSX.Element;
+}
+
+class App extends React.Component<object, AppState> {
+  constructor(props: object) {
     super(props);
     this.state = {
       game: () => (
@@ -13,7 +16,7 @@ class App extends React.Component {
     };
   }
 
-  newGameWithClick = id => {
+  newGameWithClick = (id: number) => {
     console.log("newGame with click");
     this.setState({
       game: () => (

@@ -1,7 +1,12 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import SevenSeg from "./sevenSeg";
 
-class Counter extends Component {
+interface CounterProps {
+  number: number;
+  float: "left" | "right";
+}
+
+class Counter extends Component<CounterProps> {
   getFirstDec() {
     const number = this.props.number;
     if (number >= 0) {

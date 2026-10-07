@@ -1,8 +1,21 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import Square from "./square";
+import { SquareData } from "./types";
 //import { classMethod } from "@babel/types";
 
-class Board extends Component {
+interface BoardProps {
+  squares: SquareData[][];
+  win: boolean;
+  lose: boolean;
+  onHover: () => void;
+  onClick: (id: number, event?: React.MouseEvent) => void;
+  onContextMenu: (id: number, event?: React.MouseEvent) => void;
+  onDoubleClick: (id: number, event?: React.MouseEvent) => void;
+  onMouseDown: (event: React.MouseEvent) => void;
+  onMouseUp: () => void;
+}
+
+class Board extends Component<BoardProps> {
   render() {
     //console.log(this.state.squares);
     let index = 0;
@@ -26,7 +39,7 @@ class Board extends Component {
                 onMouseDown={event => {
                   this.props.onMouseDown(event);
                 }}
-                onMouseUp={this.props.onMouseup}
+                onMouseUp={this.props.onMouseUp}
               />
             ))}
           </div>
