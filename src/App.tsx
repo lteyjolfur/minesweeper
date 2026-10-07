@@ -15,7 +15,6 @@ class App extends React.Component<object, AppState> {
   }
 
   newGame = () => {
-    console.log("newGame");
     this.setState({
       game: () => <Game newGame={this.newGame} />
     });
@@ -34,16 +33,4 @@ class App extends React.Component<object, AppState> {
   }
 }
 
-/*
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>Minesweeper</p>
-      </header>
-      <Game />
-    </div>
-  );
-}
-*/
 export default App;

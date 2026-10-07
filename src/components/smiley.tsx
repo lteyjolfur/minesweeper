@@ -1,5 +1,4 @@
 import { Component } from "react";
-//import { directive } from "@babel/types";
 
 interface SmileyProps {
   smiley: {
@@ -30,7 +29,6 @@ class Smiley extends Component<SmileyProps> {
             height: "72px !important",
             fontSize: 40,
             padding: 0
-            //whiteSpace: "nowrap",
           }}
         >
           {this.props.smiley.display[this.props.smiley.displayIndex]}

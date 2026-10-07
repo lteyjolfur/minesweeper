@@ -99,7 +99,6 @@ class Game extends Component<GameProps, GameState> {
   }
 
   componentWillUnmount() {
-    console.log("unMounted");
     this.stopTimer();
   }
 
@@ -193,7 +192,6 @@ class Game extends Component<GameProps, GameState> {
 
   handleWin = () => {
     // put glasses, put flag on all mines disable board
-    console.log("handleWin");
     const smiley = this.state.smiley;
     smiley.displayIndex = "win";
     smiley.display["smiley"] = "😎";
@@ -215,9 +213,7 @@ class Game extends Component<GameProps, GameState> {
   };
 
   handleClick = (id: number) => {
-    //console.log("handleClick id: " + id);
     if (this.state.firstClick) {
-      console.log("firstClick");
       const [row, column] = this.getRowColumn(id);
       this.placeMines(this.state.squares, row, column);
       this.startTimer();
@@ -227,7 +223,6 @@ class Game extends Component<GameProps, GameState> {
       return;
     }
     if (this.state.rightButtonDown === true) {
-      console.log("true");
       this.handleMouseUp(() => {
         this.handleDoubleClick(id);
       });
@@ -320,9 +315,6 @@ class Game extends Component<GameProps, GameState> {
   };
 
   handleContextMenu = (id: number) => {
-    //if(this.state.timerHandle !== 0 && this.state.startTimer === 1){
-    //  this.setState({timerHandle})
-    //}
     const flagMap = ["blank", "flag", "question"] as const;
     const squares = this.state.squares.slice();
     let flags = this.state.flags;
@@ -346,8 +338,6 @@ class Game extends Component<GameProps, GameState> {
     const [row, column] = this.getRowColumn(id);
     if (squares[row][column].clicked === true) {
       const flags = this.checkAllAdjacent(row, column, this.countAdjacentFlags);
-      //console.log("flags is:" + flags);
-      //console.log("value is:" + squares[row][column].display.value);
       if (flags === squares[row][column].display.value.text) {
         this.chord(squares, row, column);
       }
@@ -383,12 +373,10 @@ class Game extends Component<GameProps, GameState> {
 
   countAdjacentFlags = (row: number, column: number) => {
     const squares = this.state.squares;
-    //console.log("row is :" + row + ", column is :" + column);
     let flags = 0;
     if (squares[row][column].flag === 1) {
       flags++;
     }
-    //console.log("flags is :" + flags);
     return flags;
   };
 
@@ -399,7 +387,6 @@ class Game extends Component<GameProps, GameState> {
   };
 
   handleMouseDown = (event: React.MouseEvent) => {
-    console.log(event.button);
     const smiley = this.state.smiley;
     smiley.displayIndex = "worried";
     if (event.button === 2) {
@@ -409,7 +396,6 @@ class Game extends Component<GameProps, GameState> {
   };
 
   handleMouseUp = (callback?: () => void) => {
-    console.log("up");
     this.makeSmile();
     if (typeof callback !== "undefined") {
       this.setState({ rightButtonDown: false }, callback);
@@ -418,12 +404,7 @@ class Game extends Component<GameProps, GameState> {
     }
   };
 
-  //onClickSmiley = () => {
-  //  this.props.newGame();
-  //};
-
   render() {
-    //console.log(this.state.timerHandle);
     return (
       <div
         className="outerBox"

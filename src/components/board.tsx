@@ -1,7 +1,6 @@
 import { Component } from "react";
 import Square from "./square";
 import { SquareData } from "./types";
-//import { classMethod } from "@babel/types";
 
 interface BoardProps {
   squares: SquareData[][];
@@ -17,7 +16,6 @@ interface BoardProps {
 
 class Board extends Component<BoardProps> {
   render() {
-    //console.log(this.state.squares);
     let index = 0;
     const { win, lose } = this.props;
     return (

@@ -25,7 +25,6 @@ class Counter extends Component<CounterProps> {
   }
 
   render() {
-    //console.log(this.props.number);
     return (
       <div
         style={{

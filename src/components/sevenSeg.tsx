@@ -22,12 +22,9 @@ class SevenSeg extends Component<SevenSegProps, SevenSegState> {
       for (let i = 0; i < 7; i++) {
         const styles = {} as Segment;
         if (i === 3) {
-          //styles.className = () => {
-          //this.pickClassHexagon();
           styles.className = () => {
             return this.pickClassHexagon();
           };
-          //};
           styles.style = () => {
             return { top: "-100px", left: "4px" };
           };
