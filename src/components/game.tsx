@@ -7,8 +7,6 @@ import { SquareData } from "./types";
 
 interface GameProps {
   newGame: () => void;
-  newGameWithClick: (id: number) => void;
-  clickId?: number;
 }
 
 interface GameState {
@@ -32,29 +30,20 @@ interface GameState {
   hover?: boolean;
 }
 
+const BOARD_SIZE = 9;
+const MINES = 10;
+
 class Game extends Component<GameProps, GameState> {
   constructor(props: GameProps) {
     super(props);
-    const gameSize = 9;
-    const mines = 10;
+    const gameSize = BOARD_SIZE;
 
     const squares: SquareData[][] = Array(gameSize);
-    const colorMap = [
-      "rgba(0,0,0,0)",
-      "blue",
-      "green",
-      "red",
-      "darkblue",
-      "brown",
-      "cyan",
-      "black",
-      "grey"
-    ];
     for (let i = 0; i < squares.length; i++) {
       squares[i] = Array(gameSize);
       for (let j = 0; j < squares.length; j++) {
         squares[i][j] = {
-          id: i * 10 + j,
+          id: i * BOARD_SIZE + j,
           displayIndex: "blank",
           bomb: false,
           clicked: false,
@@ -80,25 +69,74 @@ class Game extends Component<GameProps, GameState> {
         };
       }
     }
-    //console.log(squares[8][8]);
-    let iterator = 0;
-    while (iterator < mines) {
-      const i = Math.floor(Math.random() * gameSize);
-      const j = Math.floor(Math.random() * gameSize);
-      //console.log(i + " " + j);
-      if (squares[i][j].bomb === false) {
-        squares[i][j].bomb = true;
-        //iterator++;
-        //console.log("bomb " + squares[i][j].id);
-        iterator++;
-      }
-    }
-    //console.log(squares[0][0].bomb);
 
     for (let i = 0; i < gameSize; i++) {
       const iRange = this.findRange(i, gameSize);
       for (let j = 0; j < gameSize; j++) {
         const jRange = this.findRange(j, gameSize);
+        squares[i][j].Ranges = { iRange: iRange, jRange: jRange };
+      }
+    }
+    this.state = {
+      squares: squares,
+      win: false,
+      lose: false,
+      numFlags: 0,
+      smiley: {
+        display: { smiley: "🙂", worried: "😯", win: "😎", lose: "💀" },
+        displayIndex: "smiley"
+      },
+      flags: 0,
+      mines: MINES,
+      squaresClicked: 0,
+      gameSize: gameSize * gameSize,
+      time: 0,
+      timerRunning: false,
+      timerHandle: 0,
+      firstClick: true,
+      rightButtonDown: false
+    };
+  }
+
+  componentWillUnmount() {
+    console.log("unMounted");
+    this.stopTimer();
+  }
+
+  // Mines are placed after the first click so that the first click, and the
+  // squares around it, are always safe.
+  placeMines = (
+    squares: SquareData[][],
+    safeRow: number,
+    safeColumn: number
+  ) => {
+    const colorMap = [
+      "rgba(0,0,0,0)",
+      "blue",
+      "green",
+      "red",
+      "darkblue",
+      "brown",
+      "cyan",
+      "black",
+      "grey"
+    ];
+    const { iRange: safeI, jRange: safeJ } =
+      squares[safeRow][safeColumn].Ranges!;
+    let iterator = 0;
+    while (iterator < MINES) {
+      const i = Math.floor(Math.random() * BOARD_SIZE);
+      const j = Math.floor(Math.random() * BOARD_SIZE);
+      const isSafe = safeI.includes(i) && safeJ.includes(j);
+      if (squares[i][j].bomb === false && !isSafe) {
+        squares[i][j].bomb = true;
+        iterator++;
+      }
+    }
+
+    for (let i = 0; i < BOARD_SIZE; i++) {
+      for (let j = 0; j < BOARD_SIZE; j++) {
+        const { iRange, jRange } = squares[i][j].Ranges!;
         let count = 0;
         for (let I = 0; I < iRange.length; I++) {
           for (let J = 0; J < jRange.length; J++) {
@@ -116,41 +154,9 @@ class Game extends Component<GameProps, GameState> {
             borderWidth: "1px"
           }
         };
-        squares[i][j].Ranges = { iRange: iRange, jRange: jRange };
       }
     }
-    this.state = {
-      squares: squares,
-      win: false,
-      lose: false,
-      numFlags: 0,
-      smiley: {
-        display: { smiley: "🙂", worried: "😯", win: "😎", lose: "💀" },
-        displayIndex: "smiley"
-      },
-      flags: 0,
-      mines: 10,
-      squaresClicked: 0,
-      gameSize: gameSize * gameSize,
-      time: 0,
-      timerRunning: false,
-      timerHandle: 0,
-      firstClick: true,
-      rightButtonDown: false
-    };
-  }
-
-  componentDidMount() {
-    console.log("mounted");
-    if (typeof this.props.clickId !== "undefined") {
-      this.handleClick(this.props.clickId);
-    }
-  }
-
-  componentWillUnmount() {
-    console.log("unMounted");
-    this.stopTimer();
-  }
+  };
 
   findRange = (i: number, gameSize: number) => {
     let range = [i - 1, i, i + 1];
@@ -228,11 +234,7 @@ class Game extends Component<GameProps, GameState> {
     if (this.state.firstClick) {
       console.log("firstClick");
       const [row, column] = this.getRowColumn(id);
-      if (this.state.squares[row][column].bomb) {
-        console.log("1stBomb");
-        this.props.newGameWithClick(id);
-        return;
-      }
+      this.placeMines(this.state.squares, row, column);
       this.startTimer();
       this.setState({ firstClick: false }, () => {
         this.handleClick(id);
@@ -303,7 +305,7 @@ class Game extends Component<GameProps, GameState> {
   };
 
   callHandleClick = (row: number, column: number) => {
-    this.handleClick(row * 10 + column);
+    this.handleClick(row * BOARD_SIZE + column);
     return 0;
   };
 
@@ -373,8 +375,8 @@ class Game extends Component<GameProps, GameState> {
   };
 
   getRowColumn = (id: number) => {
-    const row = Math.floor(id / 10);
-    const column = id % 10;
+    const row = Math.floor(id / BOARD_SIZE);
+    const column = id % BOARD_SIZE;
     return [row, column];
   };
 

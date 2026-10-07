@@ -10,31 +10,14 @@ class App extends React.Component<object, AppState> {
   constructor(props: object) {
     super(props);
     this.state = {
-      game: () => (
-        <Game newGame={this.newGame} newGameWithClick={this.newGameWithClick} />
-      )
+      game: () => <Game newGame={this.newGame} />
     };
   }
-
-  newGameWithClick = (id: number) => {
-    console.log("newGame with click");
-    this.setState({
-      game: () => (
-        <Game
-          newGame={this.newGame}
-          newGameWithClick={this.newGameWithClick}
-          clickId={id}
-        />
-      )
-    });
-  };
 
   newGame = () => {
     console.log("newGame");
     this.setState({
-      game: () => (
-        <Game newGame={this.newGame} newGameWithClick={this.newGameWithClick} />
-      )
+      game: () => <Game newGame={this.newGame} />
     });
   };
 
