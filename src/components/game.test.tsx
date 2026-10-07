@@ -66,8 +66,13 @@ const smiley = () =>
 const isRevealed = (i: number) =>
   squares()[i].style.borderColor === "rgb(16, 16, 16)" ||
   squares()[i].style.borderColor === "black";
-const clickAt = (row: number, col: number) =>
-  fireEvent.click(squares()[row * 9 + col]);
+// A real click is mousedown, mouseup, click.
+const clickAt = (row: number, col: number) => {
+  const square = squares()[row * 9 + col];
+  fireEvent.mouseDown(square);
+  fireEvent.mouseUp(square);
+  fireEvent.click(square);
+};
 
 beforeEach(() => {
   // the timer would otherwise keep running between tests
@@ -143,6 +148,15 @@ describe("Minesweeper", () => {
     clickAt(4, 4);
     for (let i = 0; i < 3; i++) act(() => vi.advanceTimersByTime(1000));
     expect(readCounter(1)).toBe("003");
+  });
+
+  it("looks worried while the mouse is down and relaxes on release", () => {
+    seed(1);
+    render(<App />);
+    fireEvent.mouseDown(squares()[40]);
+    expect(smiley().textContent).toBe("😯");
+    fireEvent.mouseUp(squares()[40]);
+    expect(smiley().textContent).toBe("🙂");
   });
 
   it("starts a new game when the smiley is clicked", () => {

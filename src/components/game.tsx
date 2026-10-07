@@ -441,7 +441,7 @@ class Game extends Component<GameProps, GameState> {
             onMouseDown={event => {
               this.handleMouseDown(event);
             }}
-            onMouseUp={this.handleMouseUp}
+            onMouseUp={() => this.handleMouseUp()}
           />
         </div>
       </div>
