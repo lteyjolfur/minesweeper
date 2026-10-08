@@ -1,19 +1,30 @@
-import React, { Component } from "react";
+import { Component } from "react";
 
-class SevenSeg extends Component {
-  constructor() {
-    super();
+interface SevenSegProps {
+  number: number;
+}
+
+interface Segment {
+  className: () => string;
+  style: () => React.CSSProperties;
+}
+
+interface SevenSegState {
+  segments: Segment[];
+  decTo7: boolean[][];
+}
+
+class SevenSeg extends Component<SevenSegProps, SevenSegState> {
+  constructor(props: SevenSegProps) {
+    super(props);
     {
-      let segments = [];
+      const segments: Segment[] = [];
       for (let i = 0; i < 7; i++) {
-        let styles = {};
+        const styles = {} as Segment;
         if (i === 3) {
-          //styles.className = () => {
-          //this.pickClassHexagon();
           styles.className = () => {
             return this.pickClassHexagon();
           };
-          //};
           styles.style = () => {
             return { top: "-100px", left: "4px" };
           };
@@ -44,11 +55,11 @@ class SevenSeg extends Component {
     }
   }
 
-  decode = number => {
+  decode = (number: number) => {
     return this.state.decTo7[number];
   };
 
-  pickColor = segment => {
+  pickColor = (segment: number) => {
     if (this.decode(this.props.number)[segment]) {
       return "red";
     } else {
@@ -70,7 +81,7 @@ class SevenSeg extends Component {
     return (
       <div className="SevenSeg">
         {" "}
-        {this.state.segments.map((curSeg, index) => {
+        {this.state.segments.map(curSeg => {
           return (
             <div
               key={iterator++}

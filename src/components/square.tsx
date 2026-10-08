@@ -1,10 +1,17 @@
-import React, { Component } from "react";
+import { Component } from "react";
+import { SquareData } from "./types";
 
-class Square extends Component {
-  state = {
-    hover: false
-  };
+interface SquareProps {
+  square: SquareData;
+  onHover: () => void;
+  onClick: (id: number, event: React.MouseEvent) => void;
+  onContextMenu: (id: number, event: React.MouseEvent) => void;
+  onDoubleClick: (id: number, event: React.MouseEvent) => void;
+  onMouseDown: (event: React.MouseEvent) => void;
+  onMouseUp: () => void;
+}
 
+class Square extends Component<SquareProps> {
   render() {
     return (
       <span>
@@ -15,8 +22,8 @@ class Square extends Component {
           onDoubleClick={event => {
             this.props.onDoubleClick(this.props.square.id, event);
           }}
-          onMouseEnter={this.onHover}
-          onMouseLeave={this.onHover}
+          onMouseEnter={this.props.onHover}
+          onMouseLeave={this.props.onHover}
           onContextMenu={event => {
             event.preventDefault();
             this.props.onContextMenu(this.props.square.id, event);
@@ -24,7 +31,7 @@ class Square extends Component {
           onMouseDown={event => {
             this.props.onMouseDown(event);
           }}
-          onMouseUp={this.props.onMouseup}
+          onMouseUp={this.props.onMouseUp}
           className=" btn btn-secondary square square-small"
           style={
             this.props.square.display[this.props.square.displayIndex].style
