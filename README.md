@@ -49,3 +49,7 @@ npm run dev
 CI (`.github/workflows/ci.yml`) runs typecheck, lint, format check, tests, build and `npm audit` on every pull request and push. Pushes to the default branch also deploy `dist/` to GitHub Pages.
 
 **One-time setup:** in the repository, go to **Settings → Pages → Source** and choose **GitHub Actions**.
+
+## License
+
+[MIT](LICENSE)
